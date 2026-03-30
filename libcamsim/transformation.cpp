@@ -23,6 +23,7 @@
  */
 
 #include "transformation.hpp"
+#include <iostream>
 
 namespace CamSim {
 
@@ -44,10 +45,16 @@ Transformation Transformation::fromMatrix4x4(const QMatrix4x4& M)
 {
     Transformation p;
     p.translation = M.column(3).toVector3D();
+    std::cerr << "fromMatrix4x4 diagonal: " << M(0,0) << ", " << M(1,1) << ", " << M(2,2) << std::endl;
+    std::cerr << "fromMatrix4x4 col lengths: "
+        << M.column(0).toVector3D().length() << ", "
+        << M.column(1).toVector3D().length() << ", "
+        << M.column(2).toVector3D().length() << std::endl;
     p.scaling = QVector3D(
             M.column(0).toVector3D().length() * (M(0,0) < 0 ? -1 : 1),
             M.column(1).toVector3D().length() * (M(1,1) < 0 ? -1 : 1),
             M.column(2).toVector3D().length() * (M(2,2) < 0 ? -1 : 1));
+    std::cerr << "fromMatrix4x4 scaling result: " << p.scaling.x() << ", " << p.scaling.y() << ", " << p.scaling.z() << std::endl;
     QMatrix4x4 R;
     R.setColumn(0, M.column(0) / p.scaling.x());
     R.setColumn(1, M.column(1) / p.scaling.y());
