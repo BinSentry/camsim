@@ -45,9 +45,9 @@ Transformation Transformation::fromMatrix4x4(const QMatrix4x4& M)
     Transformation p;
     p.translation = M.column(3).toVector3D();
     p.scaling = QVector3D(
-            M.column(0).toVector3D().length(),
-            M.column(1).toVector3D().length(),
-            M.column(2).toVector3D().length());
+            M.column(0).toVector3D().length() * (M(0,0) < 0 ? -1 : 1),
+            M.column(1).toVector3D().length() * (M(1,1) < 0 ? -1 : 1),
+            M.column(2).toVector3D().length() * (M(2,2) < 0 ? -1 : 1));
     QMatrix4x4 R;
     R.setColumn(0, M.column(0) / p.scaling.x());
     R.setColumn(1, M.column(1) / p.scaling.y());
